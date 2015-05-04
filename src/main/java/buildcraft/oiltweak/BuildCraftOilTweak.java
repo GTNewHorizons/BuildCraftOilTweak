@@ -1,5 +1,6 @@
 package buildcraft.oiltweak;
 
+import buildcraft.oiltweak.integration.simplyjetpacks.BuildCraftConfig;
 import buildcraft.oiltweak.integration.simplyjetpacks.IntegrationSimplyJetpacks;
 import buildcraft.oiltweak.reference.Mods;
 import cpw.mods.fml.common.FMLCommonHandler;
@@ -14,17 +15,19 @@ import net.minecraftforge.common.MinecraftForge;
  * @author Vexatos
  */
 @Mod(modid = Mods.BCOilTweak, name = Mods.BCOilTweak_NAME, version = "@VERSION@", canBeDeactivated = true,
-	dependencies = "required-after:BuildCraft|Core@[6.4.1,);required-after:Forge@[10.13.2.1236,);"
-		+ "required-after:BuildCraft|Energy@[6.4.1,);after:EnderIO@[1.7.10_2.2.7,);after:simplyjetpacks")
+	dependencies = "after:BuildCraft|Core@[6.4.1,);after:Forge@[10.13.2.1236,);"
+		+ "after:BuildCraft|Energy@[6.4.1,);after:EnderIO@[1.7.10_2.2.7,);after:simplyjetpacks")
 public class BuildCraftOilTweak {
 
 	@Instance(Mods.BCOilTweak)
 	public static BuildCraftOilTweak instance;
 	private static OilTweakEventHandler eventHandler;
 	private static IntegrationSimplyJetpacks simplyJetpacks;
+	public static BuildCraftConfig config;
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
+		config = new BuildCraftConfig();
 		eventHandler = new OilTweakEventHandler();
 		FMLCommonHandler.instance().bus().register(eventHandler);
 		MinecraftForge.EVENT_BUS.register(eventHandler);

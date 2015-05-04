@@ -1,6 +1,5 @@
 package buildcraft.oiltweak;
 
-import buildcraft.BuildCraftEnergy;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -15,6 +14,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 /**
  * @author Vexatos
@@ -34,8 +35,7 @@ public class OilTweakEventHandler {
 			for(int x = minX; x <= maxX; ++x) {
 				for(int y = minY; y <= maxY; ++y) {
 					for(int z = minZ; z <= maxZ; ++z) {
-						Block block = entity.worldObj.getBlock(x, y, z);
-						if(block == BuildCraftEnergy.blockOil) {
+						if(isOil(entity.worldObj.getBlock(x, y, z))) {
 							return true;
 						}
 					}
@@ -45,9 +45,20 @@ public class OilTweakEventHandler {
 		return false;
 	}
 
+	private boolean isOil(Block block) {
+		if(block == null) {
+			return false;
+		}
+		Fluid fluid = FluidRegistry.lookupFluidForBlock(block);
+		return fluid != null
+			&& FluidRegistry.isFluidRegistered(fluid)
+			&& fluid.getName() != null
+			&& fluid.getName().equalsIgnoreCase("oil");
+	}
+
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onPlayerUpdate(TickEvent.PlayerTickEvent e) {
-		if(!BuildCraftEnergy.isOilDense) {
+		if(!BuildCraftOilTweak.config.isOilDense()) {
 			return;
 		}
 		EntityPlayer player = e.player;
@@ -69,7 +80,7 @@ public class OilTweakEventHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onPlayerClientUpdate(TickEvent.ClientTickEvent e) {
-		if(!BuildCraftEnergy.isOilDense) {
+		if(!BuildCraftOilTweak.config.isOilDense()) {
 			return;
 		}
 		EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
@@ -90,6 +101,9 @@ public class OilTweakEventHandler {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onLivingUpdate(LivingEvent.LivingUpdateEvent e) {
+		if(!BuildCraftOilTweak.config.isOilDense()) {
+			return;
+		}
 		EntityLivingBase entity = e.entityLiving;
 		if(!isInOil(entity)) {
 			return;
@@ -107,12 +121,12 @@ public class OilTweakEventHandler {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onBreakSpeed(PlayerEvent.BreakSpeed e) {
-		if(!BuildCraftEnergy.isOilDense) {
+		if(!BuildCraftOilTweak.config.isOilDense()) {
 			return;
 		}
 		EntityPlayer player = e.entityPlayer;
 		if(isInOil(player)) {
-			e.newSpeed = e.originalSpeed <= e.newSpeed ? e.originalSpeed / 2f : e.newSpeed / 2f;
+			e.newSpeed = e.originalSpeed <= e.newSpeed ? e.originalSpeed / 3f : e.newSpeed / 3f;
 		}
 	}
 }
