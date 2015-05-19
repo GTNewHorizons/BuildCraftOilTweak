@@ -2,7 +2,7 @@
   {
     "modid": "BuildCraftOilTweak",
     "name": "BuildCraft Oil Tweak",
-    "description": "A small tweak mod making BuildCraft oil a little bit more dangerous.",
+    "description": "A small tweak mod making BuildCraft's and other mods' oil a little bit more dangerous.",
     "version": "${version}",
     "credits": "",
     "logoFile": "",

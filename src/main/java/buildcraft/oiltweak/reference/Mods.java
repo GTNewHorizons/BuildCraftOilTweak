@@ -9,7 +9,7 @@ import cpw.mods.fml.common.ModAPIManager;
 public class Mods {
 	//The mod itself
 	public static final String
-		BCOilTweak = "BuildCraftOilTweak",
+		BCOilTweak = "OilTweak",
 		BCOilTweak_NAME = "BuildCraft Oil Tweak";
 
 	//Other mods

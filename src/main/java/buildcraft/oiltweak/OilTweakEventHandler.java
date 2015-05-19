@@ -1,5 +1,7 @@
 package buildcraft.oiltweak;
 
+import buildcraft.oiltweak.api.OilTweakAPI;
+import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
@@ -11,9 +13,12 @@ import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.MathHelper;
+import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
@@ -22,7 +27,15 @@ import net.minecraftforge.fluids.FluidRegistry;
  */
 public class OilTweakEventHandler {
 
-	protected boolean isInOil(Entity entity) {
+	private enum InOil {
+		NONE, HALF, FULL;
+
+		public boolean halfOfFull() {
+			return this != NONE;
+		}
+	}
+
+	protected InOil getInOil(Entity entity) {
 		//Taken from Entity class
 		int minX = MathHelper.floor_double(entity.boundingBox.minX + 0.001D);
 		int minY = MathHelper.floor_double(entity.boundingBox.minY + 0.001D);
@@ -36,13 +49,13 @@ public class OilTweakEventHandler {
 				for(int y = minY; y <= maxY; ++y) {
 					for(int z = minZ; z <= maxZ; ++z) {
 						if(isOil(entity.worldObj.getBlock(x, y, z))) {
-							return true;
+							return (int) (y + entity.getEyeHeight()) != y && isOil(entity.worldObj.getBlock(x, (int) (y + entity.getEyeHeight()), z)) ? InOil.FULL : InOil.HALF;
 						}
 					}
 				}
 			}
 		}
-		return false;
+		return InOil.NONE;
 	}
 
 	private boolean isOil(Block block) {
@@ -62,7 +75,7 @@ public class OilTweakEventHandler {
 			return;
 		}
 		EntityPlayer player = e.player;
-		if(!isInOil(player)) {
+		if(!getInOil(player).halfOfFull()) {
 			return;
 		}
 		player.motionY = Math.min(0.0D, player.motionY);
@@ -84,7 +97,7 @@ public class OilTweakEventHandler {
 			return;
 		}
 		EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
-		if(player == null || !isInOil(player)) {
+		if(player == null || !getInOil(player).halfOfFull()) {
 			return;
 		}
 		player.motionY = Math.min(0.0D, player.motionY);
@@ -105,7 +118,7 @@ public class OilTweakEventHandler {
 			return;
 		}
 		EntityLivingBase entity = e.entityLiving;
-		if(!isInOil(entity)) {
+		if(!getInOil(entity).halfOfFull()) {
 			return;
 		}
 		entity.motionY = Math.min(0.0D, entity.motionY);
@@ -125,8 +138,34 @@ public class OilTweakEventHandler {
 			return;
 		}
 		EntityPlayer player = e.entityPlayer;
-		if(isInOil(player)) {
+		if(getInOil(player).halfOfFull()) {
 			e.newSpeed = e.originalSpeed <= e.newSpeed ? e.originalSpeed / 3f : e.newSpeed / 3f;
+		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public void onTeleportAttempt(EnderTeleportEvent e) {
+		if(!BuildCraftOilTweak.config.isOilDense()) {
+			return;
+		}
+		EntityLivingBase player = e.entityLiving;
+		if(getInOil(player).halfOfFull()) {
+			e.setCanceled(true);
+			e.setResult(Event.Result.DENY);
+		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public void onRightClick(PlayerInteractEvent e) {
+		if(!BuildCraftOilTweak.config.isOilDense()) {
+			return;
+		}
+		EntityPlayer player = e.entityPlayer;
+		if(!player.capabilities.isCreativeMode && OilTweakAPI.INSTANCE.getItemBlacklistRegistry().isBlacklisted(player, player.inventory.getCurrentItem())) {
+			InOil inOil = getInOil(player);
+			player.addChatComponentMessage(new ChatComponentTranslation(inOil == InOil.FULL ?
+				"oiltweak.chat.tooDense.use" : "oiltweak.chat.tooDense.use.half"));
+			e.setCanceled(true);
 		}
 	}
 }
