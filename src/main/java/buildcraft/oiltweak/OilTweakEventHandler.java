@@ -169,8 +169,8 @@ public class OilTweakEventHandler {
 		EntityPlayer player = e.entityPlayer;
 		if(!player.capabilities.isCreativeMode && player.getCurrentEquippedItem() != null) {
 			InOil inOil = getInOil(player);
-			if((inOil == InOil.FULL && !(player.getCurrentEquippedItem().getItem() instanceof ItemBlock))
-				|| OilTweakAPI.INSTANCE.getItemBlacklistRegistry().isBlacklisted(player, player.getCurrentEquippedItem())) {
+			if(inOil.halfOfFull() && ((inOil == InOil.FULL && !(player.getCurrentEquippedItem().getItem() instanceof ItemBlock))
+				|| OilTweakAPI.INSTANCE.getItemBlacklistRegistry().isBlacklisted(player, player.getCurrentEquippedItem()))) {
 				player.addChatComponentMessage(new ChatComponentTranslation(inOil == InOil.FULL ?
 					"oiltweak.chat.tooDense.use" : "oiltweak.chat.tooDense.use.half"));
 				e.setCanceled(true);
