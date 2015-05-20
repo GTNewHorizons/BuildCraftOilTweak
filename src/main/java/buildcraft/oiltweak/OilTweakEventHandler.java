@@ -49,7 +49,9 @@ public class OilTweakEventHandler {
 				for(int y = minY; y <= maxY; ++y) {
 					for(int z = minZ; z <= maxZ; ++z) {
 						if(isOil(entity.worldObj.getBlock(x, y, z))) {
-							return (int) (y + entity.getEyeHeight()) != y && isOil(entity.worldObj.getBlock(x, (int) (y + entity.getEyeHeight()), z)) ? InOil.FULL : InOil.HALF;
+							return (int) Math.min(minY + entity.getEyeHeight(), maxY) == minY
+								|| isOil(entity.worldObj.getBlock(x, (int) Math.min(minY + entity.getEyeHeight(), maxY), z)) ?
+								InOil.FULL : InOil.HALF;
 						}
 					}
 				}
@@ -161,11 +163,14 @@ public class OilTweakEventHandler {
 			return;
 		}
 		EntityPlayer player = e.entityPlayer;
-		if(!player.capabilities.isCreativeMode && OilTweakAPI.INSTANCE.getItemBlacklistRegistry().isBlacklisted(player, player.inventory.getCurrentItem())) {
+		if(!player.capabilities.isCreativeMode) {
 			InOil inOil = getInOil(player);
-			player.addChatComponentMessage(new ChatComponentTranslation(inOil == InOil.FULL ?
-				"oiltweak.chat.tooDense.use" : "oiltweak.chat.tooDense.use.half"));
-			e.setCanceled(true);
+			if(inOil.halfOfFull()) {
+				player.addChatComponentMessage(new ChatComponentTranslation(inOil == InOil.FULL ?
+					"oiltweak.chat.tooDense.use" : "oiltweak.chat.tooDense.use.half"));
+				e.setCanceled(inOil == InOil.FULL
+					|| OilTweakAPI.INSTANCE.getItemBlacklistRegistry().isBlacklisted(player, player.inventory.getCurrentItem()));
+			}
 		}
 	}
 }
