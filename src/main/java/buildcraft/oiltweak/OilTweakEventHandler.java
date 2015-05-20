@@ -13,6 +13,8 @@ import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
@@ -49,8 +51,8 @@ public class OilTweakEventHandler {
 				for(int y = minY; y <= maxY; ++y) {
 					for(int z = minZ; z <= maxZ; ++z) {
 						if(isOil(entity.worldObj.getBlock(x, y, z))) {
-							return (int) Math.min(minY + entity.getEyeHeight(), maxY) == minY
-								|| isOil(entity.worldObj.getBlock(x, (int) Math.min(minY + entity.getEyeHeight(), maxY), z)) ?
+							return maxY == minY
+								|| isOil(entity.worldObj.getBlock(x, maxY, z)) ?
 								InOil.FULL : InOil.HALF;
 						}
 					}
@@ -61,7 +63,7 @@ public class OilTweakEventHandler {
 	}
 
 	private boolean isOil(Block block) {
-		if(block == null) {
+		if(block == null || block == Blocks.air) {
 			return false;
 		}
 		Fluid fluid = FluidRegistry.lookupFluidForBlock(block);
@@ -151,7 +153,8 @@ public class OilTweakEventHandler {
 			return;
 		}
 		EntityLivingBase player = e.entityLiving;
-		if(getInOil(player).halfOfFull()) {
+		if(!(player instanceof EntityPlayer && ((EntityPlayer) player).capabilities.isCreativeMode)
+			&& getInOil(player).halfOfFull()) {
 			e.setCanceled(true);
 			e.setResult(Event.Result.DENY);
 		}
@@ -159,17 +162,18 @@ public class OilTweakEventHandler {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onRightClick(PlayerInteractEvent e) {
-		if(!BuildCraftOilTweak.config.isOilDense()) {
+		if(e.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK
+			|| !BuildCraftOilTweak.config.isOilDense()) {
 			return;
 		}
 		EntityPlayer player = e.entityPlayer;
-		if(!player.capabilities.isCreativeMode) {
+		if(!player.capabilities.isCreativeMode && player.getCurrentEquippedItem() != null) {
 			InOil inOil = getInOil(player);
-			if(inOil.halfOfFull()) {
+			if((inOil == InOil.FULL && !(player.getCurrentEquippedItem().getItem() instanceof ItemBlock))
+				|| OilTweakAPI.INSTANCE.getItemBlacklistRegistry().isBlacklisted(player, player.getCurrentEquippedItem())) {
 				player.addChatComponentMessage(new ChatComponentTranslation(inOil == InOil.FULL ?
 					"oiltweak.chat.tooDense.use" : "oiltweak.chat.tooDense.use.half"));
-				e.setCanceled(inOil == InOil.FULL
-					|| OilTweakAPI.INSTANCE.getItemBlacklistRegistry().isBlacklisted(player, player.inventory.getCurrentItem()));
+				e.setCanceled(true);
 			}
 		}
 	}

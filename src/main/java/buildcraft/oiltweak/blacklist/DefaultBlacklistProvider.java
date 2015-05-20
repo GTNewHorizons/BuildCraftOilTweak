@@ -12,6 +12,6 @@ import net.minecraft.item.ItemStack;
 public class DefaultBlacklistProvider implements ItemBlacklistProvider {
 	@Override
 	public boolean isBlacklisted(EntityLivingBase entity, ItemStack stack) {
-		return stack.getItem() == Items.ender_pearl || stack.getItem() instanceof ItemEnderPearl;
+		return stack != null && (stack.getItem() == Items.ender_pearl || stack.getItem() instanceof ItemEnderPearl);
 	}
 }
