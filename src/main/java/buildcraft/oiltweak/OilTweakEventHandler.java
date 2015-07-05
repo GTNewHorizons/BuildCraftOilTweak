@@ -205,11 +205,10 @@ public class OilTweakEventHandler {
 
 	private void setStepHeight(EntityLivingBase entity, float height) {
 		OilTweakProperties props = getProperties(entity);
-		if(props.inOil) {
-			return;
+		if(!props.inOil) {
+			props.realStepHeight = entity.stepHeight;
+			props.inOil = true;
 		}
-		props.realStepHeight = entity.stepHeight;
-		props.inOil = true;
 		entity.stepHeight = height;
 	}
 
