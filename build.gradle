@@ -44,6 +44,10 @@ repositories {
 		name = "Forestry repo"
 		url = "http://maven.ic2.player.to/"
 	}
+    ivy {
+		name "BuildCraft"
+		artifactPattern "http://www.mod-buildcraft.com/releases/BuildCraft/[revision]/[module]-[revision]-[classifier].[ext]"
+	}
 }
 
 configurations {
@@ -58,6 +62,7 @@ dependencies {
 		exclude module: "buildcraft"
 		exclude module: "Waila"
 	}
+	compile name: "buildcraft", version: "${config.buildcraft.version}", classifier: "dev"
 }
 
 minecraft {
@@ -111,13 +116,21 @@ task deobfJar(type: Jar) {
 	classifier = 'deobf'
 	destinationDir = file(libDir)
 	from sourceSets.main.output.classesDir
-	exclude 'cofh/**'
+}
+
+task apiZip(type: Zip) {
+	description = 'Creates a zip file containing the API source files only'
+	classifier = 'api'
+	destinationDir = file(libDir)
+	from sourceSets.main.allSource
+	include 'buildcraft/oiltweak/api/**'
 }
 
 task makeJars << {
 	description = 'Creates the mod files'
 }
 
-makeJars.dependsOn clean, build, deobfJar
+makeJars.dependsOn clean, build, deobfJar, apiZip
 build.shouldRunAfter clean
 deobfJar.shouldRunAfter build
+apiZip.shouldRunAfter deobfJar

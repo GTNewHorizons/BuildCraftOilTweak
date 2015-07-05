@@ -17,6 +17,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.MathHelper;
+import net.minecraftforge.common.IExtendedEntityProperties;
+import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -80,6 +82,7 @@ public class OilTweakEventHandler {
 		}
 		EntityPlayer player = e.player;
 		if(!getInOil(player).halfOfFull()) {
+			this.setNotInOil(player);
 			return;
 		}
 		player.motionY = Math.min(0.0D, player.motionY);
@@ -91,7 +94,7 @@ public class OilTweakEventHandler {
 		player.motionY -= 0.05D;
 		player.motionZ = Math.max(-0.05D, Math.min(0.05D, player.motionZ * 0.05D));
 		player.capabilities.isFlying = player.capabilities.isFlying && player.capabilities.isCreativeMode;
-		player.stepHeight = 0.0F;
+		setStepHeight(player, 0.0F);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -101,7 +104,11 @@ public class OilTweakEventHandler {
 			return;
 		}
 		EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
-		if(player == null || !getInOil(player).halfOfFull()) {
+		if(player == null) {
+			return;
+		}
+		if(!getInOil(player).halfOfFull()) {
+			this.setNotInOil(player);
 			return;
 		}
 		player.motionY = Math.min(0.0D, player.motionY);
@@ -113,7 +120,7 @@ public class OilTweakEventHandler {
 		player.motionY -= 0.05D;
 		player.motionZ = Math.max(-0.05D, Math.min(0.05D, player.motionZ * 0.05D));
 		player.capabilities.isFlying = player.capabilities.isFlying && player.capabilities.isCreativeMode;
-		player.stepHeight = 0.0F;
+		setStepHeight(player, 0.0F);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
@@ -123,6 +130,7 @@ public class OilTweakEventHandler {
 		}
 		EntityLivingBase entity = e.entityLiving;
 		if(!getInOil(entity).halfOfFull()) {
+			this.setNotInOil(entity);
 			return;
 		}
 		entity.motionY = Math.min(0.0D, entity.motionY);
@@ -133,7 +141,7 @@ public class OilTweakEventHandler {
 		entity.motionX = Math.max(-0.05D, Math.min(0.05D, entity.motionX * 0.05D));
 		entity.motionY -= 0.05D;
 		entity.motionZ = Math.max(-0.05D, Math.min(0.05D, entity.motionZ * 0.05D));
-		entity.stepHeight = 0.0F;
+		setStepHeight(entity, 0.0F);
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
@@ -176,5 +184,41 @@ public class OilTweakEventHandler {
 				e.setCanceled(true);
 			}
 		}
+	}
+
+	@SubscribeEvent
+	public void onEntityConstruction(EntityEvent.EntityConstructing e) {
+		if(e.entity instanceof EntityLivingBase) {
+			e.entity.registerExtendedProperties("oiltweak", new OilTweakProperties());
+		}
+	}
+
+	private OilTweakProperties getProperties(EntityLivingBase entity) {
+		IExtendedEntityProperties ieep = entity.getExtendedProperties("oiltweak");
+		if(ieep == null || !(ieep instanceof OilTweakProperties)) {
+			ieep = new OilTweakProperties();
+			ieep.init(entity, entity.worldObj);
+			entity.registerExtendedProperties("oiltweak", ieep);
+		}
+		return (OilTweakProperties) ieep;
+	}
+
+	private void setStepHeight(EntityLivingBase entity, float height) {
+		OilTweakProperties props = getProperties(entity);
+		if(props.inOil) {
+			return;
+		}
+		props.realStepHeight = entity.stepHeight;
+		props.inOil = true;
+		entity.stepHeight = height;
+	}
+
+	private void setNotInOil(EntityLivingBase entity) {
+		OilTweakProperties props = getProperties(entity);
+		if(!props.inOil) {
+			return;
+		}
+		entity.stepHeight = props.realStepHeight;
+		props.inOil = false;
 	}
 }
