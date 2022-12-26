@@ -1,3 +1,7 @@
+==== 1.0.3 ====
+
+  * FIXED: Escaping from Oil keeping your step height at 0 instead of properly resetting it.
+
 ==== 1.0.2 ====
 
   * ADDED: Now you won't be able to right click any item when fully stuck in oil.
