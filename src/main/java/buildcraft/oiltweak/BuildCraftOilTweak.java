@@ -19,7 +19,7 @@ import net.minecraftforge.common.MinecraftForge;
 /**
  * @author Vexatos
  */
-@Mod(modid = Mods.BCOilTweak, name = Mods.BCOilTweak_NAME, version = "@VERSION@", canBeDeactivated = true,
+@Mod(modid = Mods.BCOilTweak, name = Mods.BCOilTweak_NAME, version = "GRADLETOKEN_VERSION", canBeDeactivated = true,
 	dependencies = "after:BuildCraft|Core@[6.4.1,);after:Forge@[10.13.2.1236,);"
 		+ "after:BuildCraft|Energy@[6.4.1,);after:EnderIO@[1.7.10_2.2.7,);after:simplyjetpacks")
 public class BuildCraftOilTweak extends OilTweakAPI {
