@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
  */
 public interface ItemBlacklistRegistry {
 
-	void registerItemBlacklistProvider(ItemBlacklistProvider provider);
+    void registerItemBlacklistProvider(ItemBlacklistProvider provider);
 
-	boolean isBlacklisted(EntityLivingBase entity, ItemStack stack);
+    boolean isBlacklisted(EntityLivingBase entity, ItemStack stack);
 }

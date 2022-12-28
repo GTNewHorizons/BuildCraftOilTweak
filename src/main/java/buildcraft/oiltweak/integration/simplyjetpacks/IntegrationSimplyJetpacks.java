@@ -11,33 +11,33 @@ import tonius.simplyjetpacks.config.Config;
  */
 public class IntegrationSimplyJetpacks {
 
-	private boolean actualFlammableFluidsExplode = false;
+    private boolean actualFlammableFluidsExplode = false;
 
-	public void init() {
-		updateConfig();
-	}
+    public void init() {
+        updateConfig();
+    }
 
-	public void deInit() {
-		try {
-			Config.flammableFluidsExplode = actualFlammableFluidsExplode;
-		} catch(Exception e) {
-			// NO-OP
-		}
-	}
+    public void deInit() {
+        try {
+            Config.flammableFluidsExplode = actualFlammableFluidsExplode;
+        } catch (Exception e) {
+            // NO-OP
+        }
+    }
 
-	private void updateConfig() {
-		try {
-			actualFlammableFluidsExplode = Config.flammableFluidsExplode;
-			Config.flammableFluidsExplode = true;
-		} catch(Exception e) {
-			// NO-OP
-		}
-	}
+    private void updateConfig() {
+        try {
+            actualFlammableFluidsExplode = Config.flammableFluidsExplode;
+            Config.flammableFluidsExplode = true;
+        } catch (Exception e) {
+            // NO-OP
+        }
+    }
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public void onConfigChanged(ConfigChangedEvent.PostConfigChangedEvent e) {
-		if(e.modID.equals(Mods.SimplyJetpacks)) {
-			updateConfig();
-		}
-	}
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public void onConfigChanged(ConfigChangedEvent.PostConfigChangedEvent e) {
+        if (e.modID.equals(Mods.SimplyJetpacks)) {
+            updateConfig();
+        }
+    }
 }

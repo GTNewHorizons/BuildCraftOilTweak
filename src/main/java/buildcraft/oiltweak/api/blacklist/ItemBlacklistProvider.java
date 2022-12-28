@@ -7,5 +7,5 @@ import net.minecraft.item.ItemStack;
  * @author Vexatos
  */
 public interface ItemBlacklistProvider {
-	boolean isBlacklisted(EntityLivingBase entity, ItemStack stack);
+    boolean isBlacklisted(EntityLivingBase entity, ItemStack stack);
 }

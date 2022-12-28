@@ -10,32 +10,32 @@ import net.minecraftforge.common.IExtendedEntityProperties;
  */
 public class OilTweakProperties implements IExtendedEntityProperties {
 
-	private Entity entity;
-	public float realStepHeight;
-	public boolean inOil;
+    private Entity entity;
+    public float realStepHeight;
+    public boolean inOil;
 
-	@Override
-	public void saveNBTData(NBTTagCompound data) {
-		data.setBoolean("oiltweak.inOil", inOil);
-		if(inOil) {
-			data.setFloat("oiltweak:stepHeight", realStepHeight);
-		}
-	}
+    @Override
+    public void saveNBTData(NBTTagCompound data) {
+        data.setBoolean("oiltweak.inOil", inOil);
+        if (inOil) {
+            data.setFloat("oiltweak:stepHeight", realStepHeight);
+        }
+    }
 
-	@Override
-	public void loadNBTData(NBTTagCompound data) {
-		if(data.hasKey("oiltweak.inOil")) {
-			inOil = data.getBoolean("oiltweak.inOil");
-		}
-		if(inOil && data.hasKey("oiltweak:stepHeight")) {
-			realStepHeight = data.getFloat("oiltweak:stepHeight");
-		}
-	}
+    @Override
+    public void loadNBTData(NBTTagCompound data) {
+        if (data.hasKey("oiltweak.inOil")) {
+            inOil = data.getBoolean("oiltweak.inOil");
+        }
+        if (inOil && data.hasKey("oiltweak:stepHeight")) {
+            realStepHeight = data.getFloat("oiltweak:stepHeight");
+        }
+    }
 
-	@Override
-	public void init(Entity entity, World world) {
-		this.entity = entity;
-		this.inOil = false;
-		this.realStepHeight = entity.stepHeight;
-	}
+    @Override
+    public void init(Entity entity, World world) {
+        this.entity = entity;
+        this.inOil = false;
+        this.realStepHeight = entity.stepHeight;
+    }
 }
