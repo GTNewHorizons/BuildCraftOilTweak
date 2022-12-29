@@ -1,17 +1,21 @@
-[
-  {
-    "modid": "BuildCraftOilTweak",
-    "name": "BuildCraft Oil Tweak",
-    "description": "A small tweak mod making BuildCraft's and other mods' oil a little bit more dangerous.",
-    "version": "${version}",
-    "credits": "",
-    "logoFile": "",
-    "mcversion": "${mcversion}",
-    "url": "",
-    "updateUrl": "",
-    "authorList": [ "Vexatos" ],
-    "parent":"",
-    "screenshots": [],
-    "dependencies": []
-  }
-]
+{
+	"modListVersion": 2,
+	"modList": [{
+		"modid": "${modId}",
+		"name": "${modName}",
+		"description": "A small tweak mod making BuildCraft's and other mods' oil a little bit more dangerous.",
+		"version": "${modVersion}",
+		"mcversion": "${minecraftVersion}",
+		"url": "",
+		"updateUrl": "",
+		"authorList": ["Vexatos"],
+		"credits": "",
+		"logoFile": "",
+		"screenshots": [],
+		"parent": "",
+		"requiredMods": [],
+		"dependencies": [],
+		"dependants": [],
+		"useDependencyInformation": true
+	}]
+}

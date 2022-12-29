@@ -6,7 +6,7 @@ import buildcraft.oiltweak.api.blacklist.ItemBlacklistRegistry;
  * @author Vexatos
  */
 public abstract class OilTweakAPI {
-	public static OilTweakAPI INSTANCE;
+    public static OilTweakAPI INSTANCE;
 
-	public abstract ItemBlacklistRegistry getItemBlacklistRegistry();
+    public abstract ItemBlacklistRegistry getItemBlacklistRegistry();
 }

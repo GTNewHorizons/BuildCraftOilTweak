@@ -19,51 +19,56 @@ import net.minecraftforge.common.MinecraftForge;
 /**
  * @author Vexatos
  */
-@Mod(modid = Mods.BCOilTweak, name = Mods.BCOilTweak_NAME, version = "@VERSION@", canBeDeactivated = true,
-	dependencies = "after:BuildCraft|Core@[6.4.1,);after:Forge@[10.13.2.1236,);"
-		+ "after:BuildCraft|Energy@[6.4.1,);after:EnderIO@[1.7.10_2.2.7,);after:simplyjetpacks")
+@Mod(
+        modid = Mods.BCOilTweak,
+        name = Mods.BCOilTweak_NAME,
+        version = "GRADLETOKEN_VERSION",
+        canBeDeactivated = true,
+        dependencies = "after:BuildCraft|Core@[6.4.1,);after:Forge@[10.13.2.1236,);"
+                + "after:BuildCraft|Energy@[6.4.1,);after:EnderIO@[1.7.10_2.2.7,);after:simplyjetpacks")
 public class BuildCraftOilTweak extends OilTweakAPI {
 
-	@Instance(Mods.BCOilTweak)
-	public static BuildCraftOilTweak instance;
-	private static OilTweakEventHandler eventHandler;
-	private static IntegrationSimplyJetpacks simplyJetpacks;
-	public static BuildCraftConfig config;
-	public static ItemBlacklistRegistry itemBlacklistRegistry;
+    @Instance(Mods.BCOilTweak)
+    public static BuildCraftOilTweak instance;
 
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
-		config = new BuildCraftConfig();
-		itemBlacklistRegistry = new BlacklistRegistry();
-		itemBlacklistRegistry.registerItemBlacklistProvider(new DefaultBlacklistProvider());
-		OilTweakAPI.INSTANCE = this;
-	}
+    private static OilTweakEventHandler eventHandler;
+    private static IntegrationSimplyJetpacks simplyJetpacks;
+    public static BuildCraftConfig config;
+    public static ItemBlacklistRegistry itemBlacklistRegistry;
 
-	@EventHandler
-	public void init(FMLInitializationEvent event) {
-		eventHandler = new OilTweakEventHandler();
-		FMLCommonHandler.instance().bus().register(eventHandler);
-		MinecraftForge.EVENT_BUS.register(eventHandler);
-		if(Mods.isLoaded(Mods.SimplyJetpacks)) {
-			simplyJetpacks = new IntegrationSimplyJetpacks();
-			FMLCommonHandler.instance().bus().register(simplyJetpacks);
-			simplyJetpacks.init();
-		}
-	}
+    @EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
+        config = new BuildCraftConfig();
+        itemBlacklistRegistry = new BlacklistRegistry();
+        itemBlacklistRegistry.registerItemBlacklistProvider(new DefaultBlacklistProvider());
+        OilTweakAPI.INSTANCE = this;
+    }
 
-	@EventHandler
-	public void deInit(FMLModDisabledEvent event) {
-		if(eventHandler != null) {
-			FMLCommonHandler.instance().bus().unregister(eventHandler);
-			MinecraftForge.EVENT_BUS.unregister(eventHandler);
-		}
-		if(Mods.isLoaded(Mods.SimplyJetpacks) && simplyJetpacks != null) {
-			simplyJetpacks.deInit();
-		}
-	}
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
+        eventHandler = new OilTweakEventHandler();
+        FMLCommonHandler.instance().bus().register(eventHandler);
+        MinecraftForge.EVENT_BUS.register(eventHandler);
+        if (Mods.isLoaded(Mods.SimplyJetpacks)) {
+            simplyJetpacks = new IntegrationSimplyJetpacks();
+            FMLCommonHandler.instance().bus().register(simplyJetpacks);
+            simplyJetpacks.init();
+        }
+    }
 
-	@Override
-	public ItemBlacklistRegistry getItemBlacklistRegistry() {
-		return itemBlacklistRegistry;
-	}
+    @EventHandler
+    public void deInit(FMLModDisabledEvent event) {
+        if (eventHandler != null) {
+            FMLCommonHandler.instance().bus().unregister(eventHandler);
+            MinecraftForge.EVENT_BUS.unregister(eventHandler);
+        }
+        if (Mods.isLoaded(Mods.SimplyJetpacks) && simplyJetpacks != null) {
+            simplyJetpacks.deInit();
+        }
+    }
+
+    @Override
+    public ItemBlacklistRegistry getItemBlacklistRegistry() {
+        return itemBlacklistRegistry;
+    }
 }
