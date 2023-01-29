@@ -1,5 +1,7 @@
 package buildcraft.oiltweak;
 
+import net.minecraftforge.common.MinecraftForge;
+
 import buildcraft.oiltweak.api.OilTweakAPI;
 import buildcraft.oiltweak.api.blacklist.ItemBlacklistRegistry;
 import buildcraft.oiltweak.blacklist.BlacklistRegistry;
@@ -14,7 +16,6 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLModDisabledEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.common.MinecraftForge;
 
 /**
  * @author Vexatos

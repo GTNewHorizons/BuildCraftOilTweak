@@ -1,10 +1,10 @@
 package buildcraft.oiltweak.integration.simplyjetpacks;
 
+import tonius.simplyjetpacks.config.Config;
 import buildcraft.oiltweak.reference.Mods;
 import cpw.mods.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import tonius.simplyjetpacks.config.Config;
 
 /**
  * @author Vexatos

@@ -7,12 +7,12 @@ import cpw.mods.fml.common.ModAPIManager;
  * @author Vexatos
  */
 public class Mods {
+
     // The mod itself
     public static final String BCOilTweak = "OilTweak", BCOilTweak_NAME = "BuildCraft Oil Tweak";
 
     // Other mods
-    public static final String BuildCraftCore = "BuildCraft|Core",
-            BuildCraftEnergy = "BuildCraft|Energy",
+    public static final String BuildCraftCore = "BuildCraft|Core", BuildCraftEnergy = "BuildCraft|Energy",
             SimplyJetpacks = "simplyjetpacks";
 
     public static boolean hasAPI(String name) {

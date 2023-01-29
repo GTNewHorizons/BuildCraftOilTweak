@@ -8,6 +8,7 @@ import cpw.mods.fml.common.Optional;
  * @author Vexatos
  */
 public class BuildCraftConfig {
+
     public boolean isOilDense() {
         return Mods.isLoaded(Mods.BuildCraftEnergy) && isOilDense_BC();
     }

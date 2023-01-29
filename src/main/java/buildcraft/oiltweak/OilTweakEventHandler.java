@@ -1,12 +1,5 @@
 package buildcraft.oiltweak;
 
-import buildcraft.oiltweak.api.OilTweakAPI;
-import cpw.mods.fml.common.eventhandler.Event;
-import cpw.mods.fml.common.eventhandler.EventPriority;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -26,12 +19,21 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
+import buildcraft.oiltweak.api.OilTweakAPI;
+import cpw.mods.fml.common.eventhandler.Event;
+import cpw.mods.fml.common.eventhandler.EventPriority;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
 /**
  * @author Vexatos
  */
 public class OilTweakEventHandler {
 
     private enum InOil {
+
         NONE,
         HALF,
         FULL;
@@ -55,8 +57,7 @@ public class OilTweakEventHandler {
                 for (int y = minY; y <= maxY; ++y) {
                     for (int z = minZ; z <= maxZ; ++z) {
                         if (isOil(entity.worldObj.getBlock(x, y, z))) {
-                            return maxY == minY || isOil(entity.worldObj.getBlock(x, maxY, z))
-                                    ? InOil.FULL
+                            return maxY == minY || isOil(entity.worldObj.getBlock(x, maxY, z)) ? InOil.FULL
                                     : InOil.HALF;
                         }
                     }
@@ -71,8 +72,7 @@ public class OilTweakEventHandler {
             return false;
         }
         Fluid fluid = FluidRegistry.lookupFluidForBlock(block);
-        return fluid != null
-                && FluidRegistry.isFluidRegistered(fluid)
+        return fluid != null && FluidRegistry.isFluidRegistered(fluid)
                 && fluid.getName() != null
                 && fluid.getName().equalsIgnoreCase("oil");
     }
@@ -179,13 +179,13 @@ public class OilTweakEventHandler {
         if (!player.capabilities.isCreativeMode && player.getCurrentEquippedItem() != null) {
             InOil inOil = getInOil(player);
             if (inOil.halfOfFull()
-                    && ((inOil == InOil.FULL
-                                    && !(player.getCurrentEquippedItem().getItem() instanceof ItemBlock))
-                            || OilTweakAPI.INSTANCE
-                                    .getItemBlacklistRegistry()
+                    && ((inOil == InOil.FULL && !(player.getCurrentEquippedItem().getItem() instanceof ItemBlock))
+                            || OilTweakAPI.INSTANCE.getItemBlacklistRegistry()
                                     .isBlacklisted(player, player.getCurrentEquippedItem()))) {
-                player.addChatComponentMessage(new ChatComponentTranslation(
-                        inOil == InOil.FULL ? "oiltweak.chat.tooDense.use" : "oiltweak.chat.tooDense.use.half"));
+                player.addChatComponentMessage(
+                        new ChatComponentTranslation(
+                                inOil == InOil.FULL ? "oiltweak.chat.tooDense.use"
+                                        : "oiltweak.chat.tooDense.use.half"));
                 e.setCanceled(true);
             }
         }
