@@ -1,4 +1,4 @@
 dependencies {
-    compile('com.github.GTNewHorizons:BuildCraft:7.1.28:dev')
+    compile('com.github.GTNewHorizons:BuildCraft:7.1.39:dev')
     compileOnly(deobf('https://mediafilez.forgecdn.net/files/2267/185/SimplyJetpacks-MC1.7.10-1.5.3.jar'))
 }
