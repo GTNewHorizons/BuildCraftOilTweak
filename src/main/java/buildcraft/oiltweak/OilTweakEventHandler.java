@@ -58,7 +58,7 @@ public class OilTweakEventHandler {
                     for (int z = minZ; z <= maxZ; ++z) {
                         if (isOil(entity.worldObj.getBlock(x, y, z))) {
                             return maxY == minY || isOil(entity.worldObj.getBlock(x, maxY, z)) ? InOil.FULL
-                                    : InOil.HALF;
+                                : InOil.HALF;
                         }
                     }
                 }
@@ -73,8 +73,9 @@ public class OilTweakEventHandler {
         }
         Fluid fluid = FluidRegistry.lookupFluidForBlock(block);
         return fluid != null && FluidRegistry.isFluidRegistered(fluid)
-                && fluid.getName() != null
-                && fluid.getName().equalsIgnoreCase("oil");
+            && fluid.getName() != null
+            && fluid.getName()
+                .equalsIgnoreCase("oil");
     }
 
     @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -164,7 +165,7 @@ public class OilTweakEventHandler {
         }
         EntityLivingBase player = e.entityLiving;
         if (!(player instanceof EntityPlayer && ((EntityPlayer) player).capabilities.isCreativeMode)
-                && getInOil(player).halfOfFull()) {
+            && getInOil(player).halfOfFull()) {
             e.setCanceled(true);
             e.setResult(Event.Result.DENY);
         }
@@ -178,14 +179,12 @@ public class OilTweakEventHandler {
         EntityPlayer player = e.entityPlayer;
         if (!player.capabilities.isCreativeMode && player.getCurrentEquippedItem() != null) {
             InOil inOil = getInOil(player);
-            if (inOil.halfOfFull()
-                    && ((inOil == InOil.FULL && !(player.getCurrentEquippedItem().getItem() instanceof ItemBlock))
-                            || OilTweakAPI.INSTANCE.getItemBlacklistRegistry()
-                                    .isBlacklisted(player, player.getCurrentEquippedItem()))) {
+            if (inOil.halfOfFull() && ((inOil == InOil.FULL && !(player.getCurrentEquippedItem()
+                .getItem() instanceof ItemBlock)) || OilTweakAPI.INSTANCE.getItemBlacklistRegistry()
+                    .isBlacklisted(player, player.getCurrentEquippedItem()))) {
                 player.addChatComponentMessage(
-                        new ChatComponentTranslation(
-                                inOil == InOil.FULL ? "oiltweak.chat.tooDense.use"
-                                        : "oiltweak.chat.tooDense.use.half"));
+                    new ChatComponentTranslation(
+                        inOil == InOil.FULL ? "oiltweak.chat.tooDense.use" : "oiltweak.chat.tooDense.use.half"));
                 e.setCanceled(true);
             }
         }

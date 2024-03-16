@@ -13,7 +13,7 @@ public class Mods {
 
     // Other mods
     public static final String BuildCraftCore = "BuildCraft|Core", BuildCraftEnergy = "BuildCraft|Energy",
-            SimplyJetpacks = "simplyjetpacks";
+        SimplyJetpacks = "simplyjetpacks";
 
     public static boolean hasAPI(String name) {
         return ModAPIManager.INSTANCE.hasAPI(name);
