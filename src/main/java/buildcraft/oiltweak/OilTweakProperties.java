@@ -10,7 +10,6 @@ import net.minecraftforge.common.IExtendedEntityProperties;
  */
 public class OilTweakProperties implements IExtendedEntityProperties {
 
-    private Entity entity;
     public float realStepHeight;
     public boolean inOil;
 
@@ -34,7 +33,6 @@ public class OilTweakProperties implements IExtendedEntityProperties {
 
     @Override
     public void init(Entity entity, World world) {
-        this.entity = entity;
         this.inOil = false;
         this.realStepHeight = entity.stepHeight;
     }
