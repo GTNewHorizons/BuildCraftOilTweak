@@ -23,10 +23,10 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 @Mod(
         modid = Mods.BCOilTweak,
         name = Mods.BCOilTweak_NAME,
-        version = "GRADLETOKEN_VERSION",
         canBeDeactivated = true,
         dependencies = "after:BuildCraft|Core@[6.4.1,);after:Forge@[10.13.2.1236,);"
                 + "after:BuildCraft|Energy@[6.4.1,);after:EnderIO@[1.7.10_2.2.7,);after:simplyjetpacks")
+    version = Tags.VERSION,
 public class BuildCraftOilTweak extends OilTweakAPI {
 
     @Instance(Mods.BCOilTweak)
