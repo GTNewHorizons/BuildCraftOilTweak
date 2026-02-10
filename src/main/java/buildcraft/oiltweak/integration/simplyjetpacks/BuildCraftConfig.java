@@ -10,7 +10,7 @@ import cpw.mods.fml.common.Optional;
 public class BuildCraftConfig {
 
     public boolean isOilDense() {
-        return Mods.isLoaded(Mods.BuildCraftEnergy) && isOilDense_BC();
+        return Mods.isBCEnergyLoaded && isOilDense_BC();
     }
 
     @Optional.Method(modid = Mods.BuildCraftEnergy)
