@@ -52,7 +52,7 @@ public class BuildCraftOilTweak extends OilTweakAPI {
             .bus()
             .register(eventHandler);
         MinecraftForge.EVENT_BUS.register(eventHandler);
-        if (Mods.isLoaded(Mods.SimplyJetpacks)) {
+        if (Mods.isSimplyJetpacksLoaded) {
             simplyJetpacks = new IntegrationSimplyJetpacks();
             FMLCommonHandler.instance()
                 .bus()
@@ -69,7 +69,7 @@ public class BuildCraftOilTweak extends OilTweakAPI {
                 .unregister(eventHandler);
             MinecraftForge.EVENT_BUS.unregister(eventHandler);
         }
-        if (Mods.isLoaded(Mods.SimplyJetpacks) && simplyJetpacks != null) {
+        if (simplyJetpacks != null) {
             simplyJetpacks.deInit();
         }
     }
